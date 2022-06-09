@@ -1,0 +1,11 @@
+Package: prtree
+Type: Package
+Title: Principal trees for dimensionality reduction and visualization
+Version: 1.0
+Date: 2022-06-08
+Author: Michael C. Grundler
+Maintainer: Michael C. Grundler <mcgrundler@gmail.com>
+Description: prtree is an R package for constructing principal trees.
+Depends: R (>= 3.5.0)
+NeedsCompilation: yes
+License: CC0

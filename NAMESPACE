@@ -1,0 +1,6 @@
+useDynLib(prtree, .registration = TRUE)
+exportPattern("^[[:alpha:]]+")
+
+S3method(predict, prtree)
+S3method(points, prtree)
+S3method(plot, prtree)
