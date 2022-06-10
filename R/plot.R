@@ -68,7 +68,7 @@ points.prtree = function(x, by, piecol, piebg, ...)
     if (missing(by) || missing(piebg))
     {
         args = list(...)
-        cex = ifelse(is.null(args$cex), 1, args$cex)
+        cex = if (is.null(args$cex)) 1 else args$cex
         args$cex = cex * colMeans(obj$r)
         args$x = obj$layout
         do.call(points, args)
@@ -96,9 +96,10 @@ points.prtree = function(x, by, piecol, piebg, ...)
         }
 
         args = list(...)
-        cex = ifelse(is.null(args$cex), 1, args$cex)
+        cex = if (is.null(args$cex)) 1 else args$cex
         args$cex = NULL
-        rad = cex * colMeans(obj$r) * par("cxy")[2] / pi
+        cex.vertex = colMeans(obj$r)
+        rad = cex * cex.vertex * par("cxy")[2] / pi
 
         args$x = obj$layout[with_data,]
         args$rad = rad[with_data]
@@ -116,7 +117,7 @@ points.prtree = function(x, by, piecol, piebg, ...)
 plot.prtree = function(x, by, piecol, piebg, draw.edges=TRUE, ...) 
 {
     obj = x
-
+    
     if (is.null(obj$layout))
         obj$layout = prtree_layout(obj)
 
@@ -134,7 +135,7 @@ plot.prtree = function(x, by, piecol, piebg, draw.edges=TRUE, ...)
 
     if (draw.edges)
         segments(x0, y0, x1, y1, ...)
-
+    
     points(obj, by, piecol, piebg, ...)
 
     invisible(obj)
