@@ -13,7 +13,12 @@ prtree_layout = function(object)
     stopifnot(inherits(object, "prtree"))
 
     # Initial layout
-    x = cmdscale(dist(object$v))
+    if (nrow(object$v) > 2)
+        x = cmdscale(dist(object$v))
+    else if (nrow(object$v) == 2)
+        x = rbind(rnorm(2),c(0,0))
+    else
+        return (matrix(0, 1, 2))
 
     # Fix the last vertex at (0,0)
     x = t(sweep(x, 2, x[nrow(x),]))
