@@ -71,7 +71,7 @@ static void layout(
 ** [in]     b: Binary adjaceny matrix.
 ** [in]     v: Multidimensional embedding coordinates for each vertex.
 */
-SEXP C_prtree_layout(SEXP X, SEXP b, SEXP v)
+SEXP C_prtree_layout(SEXP X, SEXP b, SEXP v, SEXP niter, SEXP echo)
 {
     int i;
     int j;
@@ -80,6 +80,9 @@ SEXP C_prtree_layout(SEXP X, SEXP b, SEXP v)
     int m = INTEGER(getAttrib(v, R_DimSymbol))[1];
     int mminus1 = m - 1;
     int nd = ndist(m);
+
+    int maxit = INTEGER(niter)[0];
+    int verbose = INTEGER(echo)[0];
 
     double d0;
     double d1;
@@ -119,7 +122,8 @@ SEXP C_prtree_layout(SEXP X, SEXP b, SEXP v)
 
     int s = 0;
     s0 = stress(d, m, x, dij);
-    Rprintf("Stress %d: %14f\n", s++, s0);
+    if (verbose)
+        Rprintf("Stress %d: %14f\n", s++, s0);
     do {
 
         for (k = 0; k < nd; ++k)
@@ -139,8 +143,9 @@ SEXP C_prtree_layout(SEXP X, SEXP b, SEXP v)
         s1 = stress(d, m, x, dij);
         delta = (s0 - s1) / s0;
         s0 = s1;
-        Rprintf("Stress %d: %14f\n", s++, s1);
-    } while (delta > eps);
+        if (verbose)
+            Rprintf("Stress %d: %14f\n", s++, s1);
+    } while (s < maxit && delta > eps);
 
     free(dij);
     free(Lw);

@@ -119,7 +119,7 @@ plot.prtree = function(x, by, piecol, piebg, draw.edges=TRUE, ...)
     obj = x
     
     if (is.null(obj$layout))
-        obj$layout = prtree_layout(obj)
+        obj$layout = prtree_layout(obj, verbose=FALSE)
 
     x = obj$layout
 

@@ -141,7 +141,8 @@ static int fit(
     const double *x,
     double *v,
     double *r,
-    int *b
+    int *b,
+    int verbose
 )
 {
     int i;
@@ -185,8 +186,11 @@ static int fit(
     len = mst(m, dij, dij_idx, b, l, parent, size);
     mqe = softmax(d, n, m, sigma, x, v, r, c, z);
     score0 = mqe + lambda * len / 2;
-    Rprintf("%-14s %-14s\n", "Iter", "Score");
-    Rprintf("%-14d %-14f\n", 0, score0);
+    if (verbose)
+    {
+        Rprintf("%-14s %-14s\n", "Iter", "Score");
+        Rprintf("%-14d %-14f\n", 0, score0);
+    }
     for (i = 0, converged = 0; i < maxit && !converged; ++i)
     {
         embed(d, n, m, lambda, x, v, l, r, c, xr, lwork, work, ipiv);
@@ -196,7 +200,8 @@ static int fit(
         score1 = mqe + lambda * len / 2;
         converged = ((score0 - score1) / score0) < 0.0001;
         score0 = score1;
-        Rprintf("%-14d %-14f\n", i+1, score0);
+        if (verbose)
+            Rprintf("%-14d %-14f\n", i+1, score0);
     }
 
     free(ipiv);
@@ -221,7 +226,8 @@ SEXP C_prtree(
     SEXP x,
     SEXP v,
     SEXP r,
-    SEXP b
+    SEXP b,
+    SEXP verbose
 )
 {
     int d = INTEGER(getAttrib(x, R_DimSymbol))[0];
@@ -229,6 +235,6 @@ SEXP C_prtree(
     int m = INTEGER(getAttrib(v, R_DimSymbol))[1];
     int converged = fit(d, n, m, *INTEGER(maxit), 
         *REAL(lambda), *REAL(sigma), REAL(x), 
-        REAL(v), REAL(r), INTEGER(b));
+        REAL(v), REAL(r), INTEGER(b), *INTEGER(verbose));
     return ScalarInteger(converged);
 }

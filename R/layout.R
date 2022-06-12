@@ -8,7 +8,7 @@
 #' Emden R. Gansner, Yehuda Koren and Stephen North.
 #' In Proceedings 12th Symposium on Graph Drawing (GD), 
 #' pages 239–250, 2004.
-prtree_layout = function(object)
+prtree_layout = function(object, maxit=10000L, verbose=TRUE)
 {
     stopifnot(inherits(object, "prtree"))
 
@@ -23,7 +23,14 @@ prtree_layout = function(object)
     # Fix the last vertex at (0,0)
     x = t(sweep(x, 2, x[nrow(x),]))
 
-    .Call(C_prtree_layout, x, object$b, t(object$v))
+    .Call(
+        C_prtree_layout
+        , x
+        , object$b
+        , t(object$v)
+        , as.integer(maxit)
+        , as.integer(verbose)
+    )
 
     t(x)
 }
