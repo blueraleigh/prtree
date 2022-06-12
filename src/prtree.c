@@ -233,8 +233,18 @@ SEXP C_prtree(
     int d = INTEGER(getAttrib(x, R_DimSymbol))[0];
     int n = INTEGER(getAttrib(x, R_DimSymbol))[1];
     int m = INTEGER(getAttrib(v, R_DimSymbol))[1];
-    int converged = fit(d, n, m, *INTEGER(maxit), 
-        *REAL(lambda), *REAL(sigma), REAL(x), 
-        REAL(v), REAL(r), INTEGER(b), *INTEGER(verbose));
+    int converged = fit(
+        d
+        , n
+        , m
+        , *INTEGER(maxit)
+        , *REAL(lambda)
+        , *REAL(sigma)
+        , REAL(x)
+        , REAL(v)
+        , REAL(r)
+        , INTEGER(b)
+        , *INTEGER(verbose)
+    );
     return ScalarInteger(converged);
 }
