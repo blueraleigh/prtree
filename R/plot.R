@@ -89,7 +89,7 @@ points.prtree = function(x, by, piecol, piebg, ...)
             stopifnot(length(by) == nrow(obj$x))
             stopifnot(length(piebg) == nlevels(by))
             # map each datum to its nearest graph vertex
-            g = predict(obj, obj$x)
+            g = apply(obj$r, 1, which.max)
             # determine pie proportions of each graph vertex
             pie = table(g, by)
             with_data = as.integer(rownames(pie))
